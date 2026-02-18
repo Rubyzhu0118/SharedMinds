@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Emotional Constellation Navigator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <div class="starfield" id="starfield"></div>
+
+  <div class="page-layout">
+
+    <!-- Title -->
+    <div class="title-block">
+      <div class="title-sparkle">✦</div>
+      <h1 class="title">Emotional <em>Constellation</em> Navigator</h1>
+      <p class="subtitle">✦ speak your feeling — find your star ✦</p>
+    </div>
+
+    <!-- Universe -->
+    <div class="universe" id="universe">
+      <canvas id="constellationCanvas"></canvas>
+      <div class="quadrant q-joy" id="q-joy">
+        <div class="q-label"><span class="q-icon">☀</span><span class="q-name">Joy</span><span class="q-sub">& Happiness</span></div>
+      </div>
+      <div class="quadrant q-sad" id="q-sad">
+        <div class="q-label"><span class="q-icon">☽</span><span class="q-name">Sadness</span><span class="q-sub">& Melancholy</span></div>
+      </div>
+      <div class="quadrant q-anger" id="q-anger">
+        <div class="q-label"><span class="q-icon">⚡</span><span class="q-name">Anger</span><span class="q-sub">& Frustration</span></div>
+      </div>
+      <div class="quadrant q-calm" id="q-calm">
+        <div class="q-label"><span class="q-icon">◎</span><span class="q-name">Calm</span><span class="q-sub">& Relaxation</span></div>
+      </div>
+      <div class="divider divider-h"></div>
+      <div class="divider divider-v"></div>
+    </div>
+
+    <!-- Controls OUTSIDE universe, in normal flow -->
+    <div class="controls">
+      <div class="input-row">
+        <input type="text" id="thoughtInput" placeholder="type your feeling…" autocomplete="off"/>
+        <button id="submitBtn">✦ place</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Return button -->
+  <button class="return-btn" id="returnBtn">← return to all</button>
+
+  <!-- Tooltip -->
+  <div class="tooltip" id="tooltip"></div>
+
+  <script src="sketch.js"></script>
+</body>
+</html>
