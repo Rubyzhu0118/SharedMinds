@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Worries Collector</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet"/>
+
+  <!-- Firebase v8 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase.js"></script>
+
+  <!-- p5.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+</head>
+<body>
+
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
+
+  <div id="ui-overlay">
+    <div id="input-container">
+      <div id="input-wrapper">
+        <input
+          type="text"
+          id="worryInput"
+          placeholder="Type in your worries and let it go…"
+          autocomplete="off"
+        />
+        <button id="sendBtn">Release</button>
+      </div>
+      <p id="hint-text">Press Enter or click Release · Double-click a sticker to remove it</p>
+    </div>
+  </div>
+
+  <div id="canvas-container"></div>
+
+  <script src="sketch.js"></script>
+</body>
+</html>
