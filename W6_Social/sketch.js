@@ -21,11 +21,13 @@ const MACARON_SHADOW = [
 ];
 
 // ─── Sticker dimensions ────────────────────────────────────────────
-const STICKER_W = 160;
-const STICKER_H = 180;
-const CORNER_R  = 18;
-const IMG_H     = 110;
-const UI_OFFSET = 110;
+const STICKER_W  = 160;
+const STICKER_H  = 210; // taller to fit name at bottom
+const CORNER_R   = 18;
+const IMG_H      = 105;
+const TEXT_H     = 48;  // worry text zone
+const NAME_H     = 22;  // author name zone
+const UI_OFFSET  = 110;
 
 // ─── App State ─────────────────────────────────────────────────────
 var worries    = {};
@@ -83,14 +85,12 @@ async function generateImage(worryId, worryText) {
 
     var data = await res.json();
     console.log("[Worries] Proxy response:", JSON.stringify(data));
-
     var url = extractURL(data);
     console.log("[Worries] Image URL:", url || "(none found)");
 
     if (url) {
       db.ref("worries/" + worryId).update({ imageURL: url, status: "done" });
     } else {
-      console.warn("[Worries] No valid URL in response:", data);
       db.ref("worries/" + worryId).update({ status: "done" });
     }
   } catch (e) {
@@ -116,19 +116,16 @@ db.ref("worries").on("value", function(snapshot) {
       })(id, w.imageURL);
     }
   }
-
   for (var cid in loadedImgs) {
     if (!data[cid] || !data[cid].imageURL) delete loadedImgs[cid];
   }
 });
 
-// ─── Submit a worry ─────────────────────────────────────────────────
-// Reads window.currentUser set by the auth listener in index.html
+// ─── Submit a worry ────────────────────────────────────────────────
 function submitWorry(text) {
   text = text.trim();
   if (!text) return;
 
-  // Guard: must be logged in
   if (!window.currentUser) {
     console.warn("[Worries] Not logged in — cannot submit.");
     return;
@@ -139,7 +136,6 @@ function submitWorry(text) {
   var x          = Math.random() * (window.innerWidth  - STICKER_W - 80) + 40;
   var y          = Math.random() * (window.innerHeight - STICKER_H - UI_OFFSET - 40) + UI_OFFSET + 20;
 
-  // ── Store userName + userId with every worry ──
   var ref = db.ref("worries").push({
     text:      text,
     x:         x,
@@ -208,30 +204,28 @@ function drawSticker(id, w) {
   push();
   translate(x, y);
 
-  // Drop shadow
+  // ── Drop shadow ──
   drawingContext.shadowOffsetX = 4;
   drawingContext.shadowOffsetY = 6;
   drawingContext.shadowBlur    = 18;
   drawingContext.shadowColor   = shadowCol + "55";
 
-  // Card body
+  // ── Card body ──
   fill(col);
   noStroke();
   rect(0, 0, STICKER_W, STICKER_H, CORNER_R);
-
   drawingContext.shadowColor = "transparent";
 
-  // Image area background
+  // ── Image area ──
   fill(255, 255, 255, 190);
-  rect(10, 10, STICKER_W - 20, IMG_H - 10, CORNER_R - 4);
+  rect(10, 10, STICKER_W - 20, IMG_H - 6, CORNER_R - 4);
 
-  // Image or animated placeholder
   if (loadedImgs[id]) {
     drawingContext.save();
     beginClip();
-    rect(10, 10, STICKER_W - 20, IMG_H - 10, CORNER_R - 4);
+    rect(10, 10, STICKER_W - 20, IMG_H - 6, CORNER_R - 4);
     endClip();
-    image(loadedImgs[id], 10, 10, STICKER_W - 20, IMG_H - 10);
+    image(loadedImgs[id], 10, 10, STICKER_W - 20, IMG_H - 6);
     drawingContext.restore();
   } else {
     var dots = ".".repeat((floor(frameCount / 20) % 3) + 1);
@@ -239,23 +233,39 @@ function drawSticker(id, w) {
     textAlign(CENTER, CENTER);
     textSize(12);
     textStyle(ITALIC);
-    text("Visualizing" + dots, STICKER_W / 2, 10 + (IMG_H - 10) / 2);
+    text("Visualizing" + dots, STICKER_W / 2, 10 + (IMG_H - 6) / 2);
     textStyle(NORMAL);
   }
 
-  // Divider
-  stroke(255, 255, 255, 120);
+  // ── Divider under image ──
+  stroke(255, 255, 255, 130);
   strokeWeight(1);
-  line(10, IMG_H + 2, STICKER_W - 10, IMG_H + 2);
+  line(10, IMG_H + 4, STICKER_W - 10, IMG_H + 4);
   noStroke();
 
-  // Worry text
-  fill(80, 60, 100);
+  // ── Worry text ──
+  fill(75, 55, 95);
   textAlign(CENTER, CENTER);
   textSize(13);
-  textLeading(16);
+  textLeading(15);
   textWrap(WORD);
-  text(w.text || "", 12, IMG_H + 6, STICKER_W - 24, STICKER_H - IMG_H - 10);
+  text(w.text || "", 12, IMG_H + 7, STICKER_W - 24, TEXT_H);
+
+  // ── Divider above name ──
+  var nameY = IMG_H + TEXT_H + 10;
+  stroke(255, 255, 255, 160);
+  strokeWeight(0.8);
+  line(14, nameY, STICKER_W - 14, nameY);
+  noStroke();
+
+  // ── Author name ──
+  var displayName = w.userName ? w.userName.split(" ")[0] : "anonymous";
+  fill(140, 110, 170, 220);
+  textAlign(CENTER, CENTER);
+  textSize(11);
+  textStyle(ITALIC);
+  text("— " + displayName, STICKER_W / 2, nameY + NAME_H / 2);
+  textStyle(NORMAL);
 
   pop();
 }
