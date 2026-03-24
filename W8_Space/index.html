@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scavenger Hunt</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.2/p5.min.js"></script>
+</head>
+<body>
+  <div id="topHint" class="top-hint hidden"></div>
+
+  <div id="controlsCard" class="controls-card">
+    <div class="controls-title">Navigation</div>
+
+    <div class="arrow-grid">
+      <div></div>
+      <div class="key-box">↑</div>
+      <div></div>
+      <div class="key-box">←</div>
+      <div class="key-box">↓</div>
+      <div class="key-box">→</div>
+    </div>
+
+    <div class="controls-text">
+      <div class="keyboard-line"><strong>Use your keyboard</strong></div>
+      <div>Up = Forward</div>
+      <div>Down = Back</div>
+      <div>Left = Turn Left</div>
+      <div>Right = Turn Right</div>
+    </div>
+  </div>
+
+  <div id="popupOverlay" class="popup-overlay hidden">
+    <div class="popup-card">
+      <div id="popupTitle" class="popup-title">Hint</div>
+      <div id="popupText" class="popup-text"></div>
+      <button id="popupBtn" class="popup-btn">Continue</button>
+    </div>
+  </div>
+
+  <script src="sketch.js"></script>
+</body>
+</html>
