@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Choreographing the Cosmos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Inconsolata:wght@300;400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- LANDING PAGE -->
+  <div id="landing">
+    <canvas id="landing-canvas"></canvas>
+    <div class="landing-content">
+      <div class="landing-title-wrap">
+        <p class="landing-eyebrow">✦ an embodied universe ✦</p>
+        <h1 class="landing-title">Choreographing<br/><em>the Cosmos</em></h1>
+        <p class="landing-subtitle">Your body remembers what the universe forgot.</p>
+      </div>
+      <button id="enter-btn" onclick="enterExperience()">
+        <span class="btn-text">Enter</span>
+        <span class="btn-glow"></span>
+      </button>
+      <p class="landing-note">Requires webcam access · Best in fullscreen</p>
+    </div>
+  </div>
+
+  <!-- MAIN EXPERIENCE -->
+  <div id="main-experience" class="hidden">
+    <!-- p5 canvas goes here -->
+    <div id="canvas-container"></div>
+
+    <!-- Webcam panel -->
+    <div id="webcam-panel">
+      <video id="webcam-video" autoplay playsinline muted></video>
+      <canvas id="hand-overlay"></canvas>
+      <div class="webcam-label">your hands</div>
+    </div>
+
+    <!-- Guidance text -->
+    <div id="guidance-wrap">
+      <div id="guidance-text"></div>
+    </div>
+
+    <!-- Discovery text -->
+    <div id="discovery-wrap">
+      <div id="discovery-text"></div>
+    </div>
+
+    <!-- Gesture indicator -->
+    <div id="gesture-indicator"></div>
+
+    <!-- Gesture legend -->
+    <div id="legend">
+      <div class="legend-title">gestures</div>
+      <div class="legend-item" data-gesture="open">☽ open hand → order</div>
+      <div class="legend-item" data-gesture="fist">● fist → gravity</div>
+      <div class="legend-item" data-gesture="swipe">→ swipe → flow</div>
+      <div class="legend-item" data-gesture="circle">○ circle → orbit</div>
+      <div class="legend-item" data-gesture="tremble">~ tremble → uncertainty</div>
+      <div class="legend-item" data-gesture="two">⟺ two hands → symmetry</div>
+    </div>
+  </div>
+
+  <!-- MediaPipe scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+  <!-- p5.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+
+  <!-- your sketch -->
+  <script src="sketch.js"></script>
+
+</body>
+</html>

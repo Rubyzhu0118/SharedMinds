@@ -1,0 +1,390 @@
+/* ─── RESET & BASE ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cosmos-bg: #000005;
+  --star-white: #e8eeff;
+  --nebula-blue: #4488ff;
+  --nebula-cyan: #00ccff;
+  --nebula-violet: #aa66ff;
+  --dust-gold: #ffcc44;
+  --font-display: 'Cormorant Garamond', serif;
+  --font-mono: 'Inconsolata', monospace;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  background: var(--cosmos-bg);
+  color: var(--star-white);
+  overflow: hidden;
+  cursor: none;
+}
+
+/* ─── CUSTOM CURSOR ─── */
+body::after {
+  content: '';
+  position: fixed;
+  width: 6px; height: 6px;
+  background: white;
+  border-radius: 50%;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+}
+
+/* ─── LANDING ─── */
+#landing {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1.2s ease, visibility 1.2s ease;
+}
+
+#landing.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+#landing-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+}
+
+.landing-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.landing-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  color: rgba(100, 160, 255, 0.6);
+  text-transform: uppercase;
+  animation: fadeUp 1.5s ease both;
+  animation-delay: 0.3s;
+}
+
+.landing-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  text-shadow:
+    0 0 80px rgba(100, 160, 255, 0.4),
+    0 0 200px rgba(60, 100, 255, 0.2);
+  animation: fadeUp 1.5s ease both;
+  animation-delay: 0.6s;
+}
+
+.landing-title em {
+  font-style: italic;
+  color: rgba(180, 210, 255, 0.9);
+}
+
+.landing-subtitle {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  font-weight: 300;
+  color: rgba(180, 200, 255, 0.55);
+  letter-spacing: 0.05em;
+  animation: fadeUp 1.5s ease both;
+  animation-delay: 0.9s;
+}
+
+#enter-btn {
+  position: relative;
+  background: transparent;
+  border: 1px solid rgba(100, 160, 255, 0.4);
+  color: rgba(200, 220, 255, 0.9);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  padding: 1rem 3rem;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.3s, color 0.3s;
+  animation: fadeUp 1.5s ease both;
+  animation-delay: 1.2s;
+}
+
+#enter-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(60,100,255,0.15), rgba(100,200,255,0.05));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+#enter-btn:hover::before { opacity: 1; }
+#enter-btn:hover {
+  border-color: rgba(100, 200, 255, 0.8);
+  color: #ffffff;
+  box-shadow: 0 0 30px rgba(80,160,255,0.3), inset 0 0 30px rgba(80,160,255,0.05);
+}
+
+.btn-glow {
+  position: absolute;
+  inset: -1px;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, rgba(100,200,255,0), rgba(100,200,255,0.3), rgba(100,200,255,0)) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+#enter-btn:hover .btn-glow { opacity: 1; }
+
+.landing-note {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: rgba(100, 130, 180, 0.35);
+  letter-spacing: 0.15em;
+  animation: fadeUp 1.5s ease both;
+  animation-delay: 1.5s;
+}
+
+/* ─── MAIN EXPERIENCE ─── */
+#main-experience {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+}
+
+#main-experience.hidden { display: none; }
+
+#canvas-container {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+#canvas-container canvas {
+  display: block;
+}
+
+/* ─── WEBCAM PANEL ─── */
+#webcam-panel {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 200px;
+  height: 150px;
+  z-index: 50;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(100, 180, 255, 0.2);
+  background: rgba(0, 5, 20, 0.4);
+  backdrop-filter: blur(8px);
+  box-shadow:
+    0 0 30px rgba(0,0,0,0.6),
+    0 0 1px rgba(100,180,255,0.3),
+    inset 0 0 20px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease;
+}
+
+#webcam-panel:hover {
+  transform: scale(1.03);
+}
+
+#webcam-video {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+  opacity: 0.85;
+}
+
+#hand-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  transform: scaleX(-1);
+}
+
+.webcam-label {
+  position: absolute;
+  bottom: 0.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: rgba(100,180,255,0.5);
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* ─── GUIDANCE TEXT ─── */
+#guidance-wrap {
+  position: fixed;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  text-align: center;
+  pointer-events: none;
+  /* Soft dark halo behind the text zone */
+  padding: 1.2rem 2.5rem 0.8rem;
+}
+
+/* Dark gradient backing behind bottom text — extends from CSS since the
+   p5 canvas already draws one, this adds a CSS safety layer */
+#guidance-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -2rem -4rem;
+  background: radial-gradient(ellipse 80% 100% at 50% 100%,
+    rgba(0,0,10,0.55) 0%,
+    rgba(0,0,10,0) 100%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+#guidance-text {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.1rem, 2.4vw, 1.75rem);
+  font-weight: 300;
+  color: rgba(215, 230, 255, 0.9);
+  text-shadow:
+    0 1px 3px rgba(0,0,10,0.9),
+    0 0 20px rgba(0,0,10,0.8),
+    0 0 40px rgba(80, 130, 255, 0.25);
+  letter-spacing: 0.06em;
+  transition: opacity 0.8s ease;
+  min-height: 2.5rem;
+}
+
+/* ─── DISCOVERY TEXT ─── */
+#discovery-wrap {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 60;
+  text-align: center;
+  pointer-events: none;
+}
+
+#discovery-text {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 3.2vw, 2.6rem);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0);
+  letter-spacing: 0.14em;
+  text-shadow:
+    0 2px 8px rgba(0,0,10,0.95),
+    0 0 30px rgba(0,0,10,0.8),
+    0 0 60px rgba(100, 160, 255, 0.3);
+  transition: color 0.5s ease, opacity 0.5s ease;
+  white-space: nowrap;
+}
+
+#discovery-text.visible {
+  color: rgba(220, 235, 255, 0.92);
+  animation: discoveryPulse 3s ease forwards;
+}
+
+/* ─── GESTURE INDICATOR ─── */
+#gesture-indicator {
+  position: fixed;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.28em;
+  color: rgba(140, 195, 255, 0.75);
+  text-transform: uppercase;
+  padding: 0.4rem 1.4rem;
+  border: 1px solid rgba(100, 180, 255, 0.12);
+  border-radius: 2rem;
+  background: rgba(0, 2, 14, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+  transition: all 0.4s ease;
+  min-width: 120px;
+  text-align: center;
+  text-shadow: 0 1px 4px rgba(0,0,10,0.9);
+}
+
+/* ─── LEGEND ─── */
+#legend {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  opacity: 0.35;
+  transition: opacity 0.4s;
+  padding: 0.8rem 1rem;
+  background: rgba(0, 2, 12, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 6px;
+  border: 1px solid rgba(80, 140, 255, 0.07);
+}
+
+#legend:hover { opacity: 0.9; }
+
+.legend-title {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(100,180,255,0.6);
+  margin-bottom: 0.3rem;
+}
+
+.legend-item {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: rgba(180, 200, 255, 0.5);
+  transition: color 0.3s;
+}
+
+.legend-item.active {
+  color: rgba(100, 200, 255, 0.95);
+  text-shadow: 0 0 10px rgba(100, 200, 255, 0.5);
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes discoveryPulse {
+  0%   { opacity: 0; transform: scale(0.9); }
+  15%  { opacity: 1; transform: scale(1.02); }
+  70%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.05); }
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1; }
+}
